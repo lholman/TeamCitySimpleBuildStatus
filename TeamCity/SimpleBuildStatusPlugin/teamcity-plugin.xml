@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<teamcity-plugin xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:noNamespaceSchemaLocation="urn:shemas-jetbrains-com:teamcity-plugin-v1-xml">
+  <info>
+    <name>simplebuildstatusplugin</name>
+    <display-name>Simple Build Status Plugin</display-name>
+    <version>1.0.0.0</version>
+    <description>Provides a rolled up status of all builds as an HTTP status code.</description>
+
+    <vendor>
+      <name></name>
+      <url>http://enter.your.url.com</url>
+    </vendor>
+  </info>
+</teamcity-plugin>
