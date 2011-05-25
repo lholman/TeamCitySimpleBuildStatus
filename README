@@ -1,0 +1,26 @@
+##TeamCitySimpleBuildStatus Plugin##
+A TeamCity plugin to roll up chosen build statuses into a single HTTP status code.
+SimpleBuildStatusPlugin exposes a non authenticated simpleBuildStatus JSP page, e.g. http://<myTeamCityServer>/simpleBuildStatus.html?projectName=<ProjectName>&guest=1 
+that returns an HTTP Response Header (no HTML page content) based on the status of the selected build project (all build configurations).
+The buildStatus page returns an 'HTTP/1.1 200 OK' in the HTTP Response Header if the selected project status is "NORMAL" (i.e. successful).
+The buildStatus page returns an 'HTTP/1.1 409 CONFLICT' in the HTTP Response Header if the selected project status is "FAILED".
+
+#Setup Git
+http://help.github.com/win-set-up-git/
+http://help.github.com/mac-set-up-git/
+
+#To clone the github repo
+$ git clone git@github.com:lholman/TeamCitySimpleBuildStatus.git
+
+#To add all files to your local repo
+$ git add .
+
+#To add a specific file to your local repo
+$ git add README
+
+#To commit added files to local repo
+$ git commit -m "Added README file"
+
+#To setup and push changes in your repo to github repo
+$ git remote add origin git@github.com:lholman/TeamCitySimpleBuildStatus.git
+$ git push origin master
