@@ -18,6 +18,7 @@
     <exclude name="**/CVS/**"/>
     <exclude name="**/SCCS/**"/>
     <exclude name="**/RCS/**"/>
+    <exclude name="**/rcs/**"/>
     <exclude name="**/.DS_Store/**"/>
     <exclude name="**/.svn/**"/>
     <exclude name="**/.pyc/**"/>
@@ -30,8 +31,6 @@
     <exclude name="**/.hg/**"/>
     <exclude name="**/*.lib/**"/>
     <exclude name="**/*~/**"/>
-    <exclude name="**/__pycache__/**"/>
-    <exclude name="**/.bundle/**"/>
   </patternset>
   <patternset id="library.patterns">
     <include name="*.zip"/>
@@ -59,33 +58,55 @@
     <include name="**/?*.ftl"/>
   </patternset>
   
-  <property name="project.jdk.home" value=""/>
-  <property name="project.jdk.bin" value=""/>
-  <property name="project.jdk.classpath" value=""/>
+  <!-- JDK definitions -->
+  
+  <property name="jdk.bin.1.6" value="${jdk.home.1.6}/bin"/>
+  <path id="jdk.classpath.1.6">
+    <fileset dir="${jdk.home.1.6}">
+      <include name="jre/lib/alt-rt.jar"/>
+      <include name="jre/lib/alt-string.jar"/>
+      <include name="jre/lib/charsets.jar"/>
+      <include name="jre/lib/deploy.jar"/>
+      <include name="jre/lib/javaws.jar"/>
+      <include name="jre/lib/jce.jar"/>
+      <include name="jre/lib/jsse.jar"/>
+      <include name="jre/lib/management-agent.jar"/>
+      <include name="jre/lib/plugin.jar"/>
+      <include name="jre/lib/resources.jar"/>
+      <include name="jre/lib/rt.jar"/>
+      <include name="jre/lib/ext/dnsns.jar"/>
+      <include name="jre/lib/ext/localedata.jar"/>
+      <include name="jre/lib/ext/sunjce_provider.jar"/>
+    </fileset>
+  </path>
+  
+  <property name="project.jdk.home" value="${jdk.home.1.6}"/>
+  <property name="project.jdk.bin" value="${jdk.bin.1.6}"/>
+  <property name="project.jdk.classpath" value="jdk.classpath.1.6"/>
   
   
   <!-- Project Libraries -->
   
   <path id="library.teamcity_open_api_common.classpath">
-    <pathelement location="${path.variable.teamcitydistribution}/bin/devPackage/common-api.jar"/>
-    <pathelement location="${path.variable.teamcitydistribution}/bin/devPackage/runtime-util.jar"/>
+    <pathelement location="${path.variable.teamcitydistribution}/devPackage/common-api.jar"/>
+    <pathelement location="${path.variable.teamcitydistribution}/devPackage/runtime-util.jar"/>
   </path>
   
   <path id="library.teamcity_open_api_server.classpath">
-    <pathelement location="${path.variable.teamcitydistribution}/bin/devPackage/server-api.jar"/>
+    <pathelement location="${path.variable.teamcitydistribution}/devPackage/server-api.jar"/>
   </path>
   
   <path id="library.teamcity_third-party.classpath">
-    <pathelement location="${path.variable.teamcitydistribution}/bin/webapps/ROOT/WEB-INF/lib/annotations.jar"/>
-    <pathelement location="${path.variable.teamcitydistribution}/bin/webapps/ROOT/WEB-INF/lib/jdom.jar"/>
-    <pathelement location="${path.variable.teamcitydistribution}/bin/webapps/ROOT/WEB-INF/lib/openapi.jar"/>
-    <pathelement location="${path.variable.teamcitydistribution}/bin/webapps/ROOT/WEB-INF/lib/spring-webmvc.jar"/>
-    <pathelement location="${path.variable.teamcitydistribution}/bin/webapps/ROOT/WEB-INF/lib/spring.jar"/>
-    <pathelement location="${path.variable.teamcitydistribution}/bin/webapps/ROOT/WEB-INF/lib/util.jar"/>
+    <pathelement location="${path.variable.teamcitydistribution}/webapps/ROOT/WEB-INF/lib/annotations.jar"/>
+    <pathelement location="${path.variable.teamcitydistribution}/webapps/ROOT/WEB-INF/lib/jdom.jar"/>
+    <pathelement location="${path.variable.teamcitydistribution}/webapps/ROOT/WEB-INF/lib/openapi.jar"/>
+    <pathelement location="${path.variable.teamcitydistribution}/webapps/ROOT/WEB-INF/lib/spring-webmvc.jar"/>
+    <pathelement location="${path.variable.teamcitydistribution}/webapps/ROOT/WEB-INF/lib/spring.jar"/>
+    <pathelement location="${path.variable.teamcitydistribution}/webapps/ROOT/WEB-INF/lib/util.jar"/>
   </path>
   
   <path id="library.tomcat.classpath">
-    <pathelement location="${path.variable.teamcitydistribution}/bin/lib/servlet-api.jar"/>
+    <pathelement location="${path.variable.teamcitydistribution}/lib/servlet-api.jar"/>
   </path>
   <!-- Register Custom Compiler Taskdefs -->
   <property name="javac2.home" value="${idea.home}/lib"/>
@@ -123,6 +144,7 @@
   </path>
   
   <path id="server.module.production.classpath">
+    <path refid="${module.jdk.classpath.server}"/>
     <path refid="library.teamcity_third-party.classpath"/>
     <path refid="library.teamcity_open_api_common.classpath"/>
     <path refid="library.teamcity_open_api_server.classpath"/>
@@ -138,6 +160,7 @@
   </path>
   
   <path id="server.module.classpath">
+    <path refid="${module.jdk.classpath.server}"/>
     <pathelement location="${server.output.dir}"/>
     <path refid="library.teamcity_third-party.classpath"/>
     <path refid="library.teamcity_open_api_common.classpath"/>
@@ -222,7 +245,15 @@
     <mkdir dir="${artifact.temp.output.server:jar}"/>
     <jar destfile="${temp.jar.path.server.jar}" duplicate="preserve" filesetmanifest="mergewithoutmain">
       <zipfileset dir="${server.output.dir}"/>
-      <zipfileset file="${basedir}/src/META-INF/MANIFEST.MF" prefix="META-INF"/>
+      <zipfileset src="${path.variable.teamcitydistribution}/devPackage/server-api.jar"/>
+      <zipfileset src="${path.variable.teamcitydistribution}/lib/servlet-api.jar"/>
+      <zipfileset src="${path.variable.teamcitydistribution}/devPackage/common-api.jar"/>
+      <zipfileset src="${path.variable.teamcitydistribution}/webapps/ROOT/WEB-INF/lib/annotations.jar"/>
+      <zipfileset src="${path.variable.teamcitydistribution}/webapps/ROOT/WEB-INF/lib/spring.jar"/>
+      <zipfileset src="${path.variable.teamcitydistribution}/webapps/ROOT/WEB-INF/lib/openapi.jar"/>
+      <zipfileset src="${path.variable.teamcitydistribution}/webapps/ROOT/WEB-INF/lib/util.jar"/>
+      <zipfileset src="${path.variable.teamcitydistribution}/webapps/ROOT/WEB-INF/lib/spring-webmvc.jar"/>
+      <zipfileset src="${path.variable.teamcitydistribution}/webapps/ROOT/WEB-INF/lib/jdom.jar"/>
     </jar>
     <copy file="${temp.jar.path.server.jar}" tofile="${artifact.temp.output.server:jar}/server.jar"/>
   </target>

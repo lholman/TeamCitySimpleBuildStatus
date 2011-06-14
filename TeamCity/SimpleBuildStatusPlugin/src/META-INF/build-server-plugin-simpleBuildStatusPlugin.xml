@@ -2,8 +2,8 @@
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
 
 <beans default-autowire="constructor">
-  <bean id="sampleExtension" class="jetbrains.sample.extensions.pageExtension.PageExtension"/>
-  <bean id="simpleBuildStatusController" class="jetbrains.sample.controller.SimpleBuildStatusController" init-method="register"/>
+  <bean id="sampleExtension" class="jetbrains.simpleBuildStatus.extensions.pageExtension.PageExtension"/>
+  <bean id="simpleBuildStatusController" class="jetbrains.simpleBuildStatus.controllers.SimpleBuildStatusController" init-method="register"/>
   <bean id="buildType" class="jetbrains.buildServer.serverSide.SBuildType" />
 
 </beans>
