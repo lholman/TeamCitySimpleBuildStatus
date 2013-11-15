@@ -15,7 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
  * Registers a Spring controllers to map /simpleBuildStatus.html to simpleBuildStatus.jsp
  */
 public class SimpleBuildStatusController extends BaseController {
-    public static final String PROJECT_NAME = "projectName";
+    public static final String PROJECT_ID = "projectId";
     private final ProjectManager projectManager;
     private final WebControllerManager myManager;
 
@@ -36,18 +36,18 @@ public class SimpleBuildStatusController extends BaseController {
      * @throws Exception
      */
     protected ModelAndView doHandle(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        if (requestHasParameter(request, PROJECT_NAME))
-           return getProject(request.getParameter(PROJECT_NAME), response);
+        if (requestHasParameter(request, PROJECT_ID))
+           return getProject(request.getParameter(PROJECT_ID), response);
         else {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "no projectName specified");
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "no projectId  specified");
             return null;
         }
     }
 
-    private ModelAndView getProject(String projectName, HttpServletResponse response) throws Exception {
-        SProject project = projectManager.findProjectByName(projectName);
+    private ModelAndView getProject(String projectId, HttpServletResponse response) throws Exception {
+        SProject project = projectManager.findProjectByExternalId(projectId);
         if (project == null) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND, "no project with name " + projectName);
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "no project with Id " + projectId);
             return null;
         }
         return new ModelAndView("/plugins/simpleBuildStatusPlugin/simpleBuildStatus.jsp")
